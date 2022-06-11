@@ -1,0 +1,54 @@
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = "native"
+}
+
+// Define your own datamodels here and run `yarn redwood prisma migrate dev`
+// to create migrations for them and apply to your dev DB.
+// TODO: Please remove the following example:
+model User {
+  id                Int                @id @default(autoincrement())
+  email             String             @unique
+  name              String?
+  role              Role               @default(KNIGHT)
+  quests            Quest[]
+  ambassadorProfile AmbassadorProfile?
+}
+
+enum Role {
+  ADMIN
+  KNIGHT
+  HERO
+}
+
+model Quest {
+  id              Int                 @id @default(autoincrement())
+  name            String?
+  userId          Int
+  submittedByuser User                @relation(fields: [userId], references: [id])
+  hero            Hero[]
+  ambassador      AmbassadorProfile[]
+}
+
+model AmbassadorProfile {
+  id           Int     @id @default(autoincrement())
+  name         String?
+  userId       Int     @unique
+  questId      Int
+  user         User    @relation(fields: [userId], references: [id])
+  quest        Quest[]
+  twitter      String
+  profileImage String
+}
+
+model Hero {
+  id      Int     @id @default(autoincrement())
+  name    String?
+  questId Int
+  quests  Quest[]
+}
