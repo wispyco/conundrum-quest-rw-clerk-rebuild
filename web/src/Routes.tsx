@@ -15,6 +15,7 @@ import QuestsLayout from 'src/layouts/QuestsLayout'
 const Routes = () => {
   return (
     <Router>
+      <Route path="/signup" page={SignupPage} name="signup" />
       <Set wrap={AmbassadorProfilesLayout}>
         <Route path="/ambassador-profiles/new" page={AmbassadorProfileNewAmbassadorProfilePage} name="newAmbassadorProfile" />
         <Route path="/ambassador-profiles/{id:Int}/edit" page={AmbassadorProfileEditAmbassadorProfilePage} name="editAmbassadorProfile" />
