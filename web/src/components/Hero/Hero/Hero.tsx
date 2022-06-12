@@ -4,9 +4,9 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
 
-const DELETE_USER_MUTATION = gql`
-  mutation DeleteUserMutation($id: Int!) {
-    deleteUser(id: $id) {
+const DELETE_HERO_MUTATION = gql`
+  mutation DeleteHeroMutation($id: Int!) {
+    deleteHero(id: $id) {
       id
     }
   }
@@ -45,11 +45,11 @@ const checkboxInputTag = (checked) => {
   return <input type="checkbox" checked={checked} disabled />
 }
 
-const User = ({ user }) => {
-  const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
+const Hero = ({ hero }) => {
+  const [deleteHero] = useMutation(DELETE_HERO_MUTATION, {
     onCompleted: () => {
-      toast.success('User deleted')
-      navigate(routes.users())
+      toast.success('Hero deleted')
+      navigate(routes.heroes())
     },
     onError: (error) => {
       toast.error(error.message)
@@ -57,8 +57,8 @@ const User = ({ user }) => {
   })
 
   const onDeleteClick = (id) => {
-    if (confirm('Are you sure you want to delete user ' + id + '?')) {
-      deleteUser({ variables: { id } })
+    if (confirm('Are you sure you want to delete hero ' + id + '?')) {
+      deleteHero({ variables: { id } })
     }
   }
 
@@ -66,29 +66,26 @@ const User = ({ user }) => {
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">User {user.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">Hero {hero.id} Detail</h2>
         </header>
         <table className="rw-table">
           <tbody>
             <tr>
               <th>Id</th>
-              <td>{user.id}</td>
-            </tr><tr>
-              <th>Uuid</th>
-              <td>{user.uuid}</td>
-            </tr><tr>
-              <th>Email</th>
-              <td>{user.email}</td>
+              <td>{hero.id}</td>
             </tr><tr>
               <th>Name</th>
-              <td>{user.name}</td>
+              <td>{hero.name}</td>
+            </tr><tr>
+              <th>Quest id</th>
+              <td>{hero.questId}</td>
             </tr>
           </tbody>
         </table>
       </div>
       <nav className="rw-button-group">
         <Link
-          to={routes.editUser({ id: user.id })}
+          to={routes.editHero({ id: hero.id })}
           className="rw-button rw-button-blue"
         >
           Edit
@@ -96,7 +93,7 @@ const User = ({ user }) => {
         <button
           type="button"
           className="rw-button rw-button-red"
-          onClick={() => onDeleteClick(user.id)}
+          onClick={() => onDeleteClick(hero.id)}
         >
           Delete
         </button>
@@ -105,4 +102,4 @@ const User = ({ user }) => {
   )
 }
 
-export default User
+export default Hero

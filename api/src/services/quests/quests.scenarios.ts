@@ -2,8 +2,8 @@ import type { Prisma } from '@prisma/client'
 
 export const standard = defineScenario<Prisma.QuestCreateArgs>({
   quest: {
-    one: { data: { submittedByuser: { create: { email: 'String6614687' } } } },
-    two: { data: { submittedByuser: { create: { email: 'String7886161' } } } },
+    one: { data: { submittedByuser: { create: { email: 'String6572325' } } } },
+    two: { data: { submittedByuser: { create: { email: 'String2968478' } } } },
   },
 })
 

@@ -4,12 +4,13 @@ import {
   FieldError,
   Label,
   TextField,
+  NumberField,
   Submit,
 } from '@redwoodjs/forms'
 
 
 
-const UserForm = (props) => {
+const HeroForm = (props) => {
   const onSubmit = (data) => {
 
   
@@ -19,10 +20,7 @@ const UserForm = (props) => {
     
     
   
-    
-    
-  
-    props.onSave(data, props?.user?.id)
+    props.onSave(data, props?.hero?.id)
   }
 
   return (
@@ -36,44 +34,6 @@ const UserForm = (props) => {
         />
       
         <Label
-          name="uuid"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Uuid
-        </Label>
-        
-          <TextField
-            name="uuid"
-            defaultValue={props.user?.uuid}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
-
-        <FieldError name="uuid" className="rw-field-error" />
-
-        <Label
-          name="email"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Email
-        </Label>
-        
-          <TextField
-            name="email"
-            defaultValue={props.user?.email}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
-
-        <FieldError name="email" className="rw-field-error" />
-
-        <Label
           name="name"
           className="rw-label"
           errorClassName="rw-label rw-label-error"
@@ -83,13 +43,32 @@ const UserForm = (props) => {
         
           <TextField
             name="name"
-            defaultValue={props.user?.name}
+            defaultValue={props.hero?.name}
             className="rw-input"
             errorClassName="rw-input rw-input-error"
           />
         
 
         <FieldError name="name" className="rw-field-error" />
+
+        <Label
+          name="questId"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Quest id
+        </Label>
+        
+          <NumberField
+            name="questId"
+            defaultValue={props.hero?.questId}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+            validation={{ required: true }}
+          />
+        
+
+        <FieldError name="questId" className="rw-field-error" />
 
         <div className="rw-button-group">
           <Submit
@@ -104,4 +83,4 @@ const UserForm = (props) => {
   )
 }
 
-export default UserForm
+export default HeroForm

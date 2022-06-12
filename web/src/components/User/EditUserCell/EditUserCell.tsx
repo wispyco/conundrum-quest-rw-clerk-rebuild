@@ -11,9 +11,9 @@ export const QUERY = gql`
   query EditUserById($id: Int!) {
     user: user(id: $id) {
       id
+      uuid
       email
       name
-      role
     }
   }
 `
@@ -21,9 +21,9 @@ const UPDATE_USER_MUTATION = gql`
   mutation UpdateUserMutation($id: Int!, $input: UpdateUserInput!) {
     updateUser(id: $id, input: $input) {
       id
+      uuid
       email
       name
-      role
     }
   }
 `

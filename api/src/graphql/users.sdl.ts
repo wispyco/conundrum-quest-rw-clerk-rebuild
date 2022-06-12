@@ -1,17 +1,12 @@
 export const schema = gql`
   type User {
     id: Int!
+    uuid: String!
     email: String!
     name: String
-    role: Role!
+    userRoles: [UserRole]!
     quests: [Quest]!
     ambassadorProfile: AmbassadorProfile
-  }
-
-  enum Role {
-    ADMIN
-    KNIGHT
-    HERO
   }
 
   type Query {
@@ -20,15 +15,15 @@ export const schema = gql`
   }
 
   input CreateUserInput {
+    uuid: String!
     email: String!
     name: String
-    role: Role!
   }
 
   input UpdateUserInput {
+    uuid: String
     email: String
     name: String
-    role: Role
   }
 
   type Mutation {

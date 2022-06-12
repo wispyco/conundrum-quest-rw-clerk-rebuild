@@ -42,14 +42,14 @@ describe('ambassadorProfiles', () => {
       const result = await createAmbassadorProfile({
         input: {
           userId: scenario.ambassadorProfile.two.userId,
-          questId: 7182105,
+          questId: 682003,
           twitter: 'String',
           profileImage: 'String',
         },
       })
 
       expect(result.userId).toEqual(scenario.ambassadorProfile.two.userId)
-      expect(result.questId).toEqual(7182105)
+      expect(result.questId).toEqual(682003)
       expect(result.twitter).toEqual('String')
       expect(result.profileImage).toEqual('String')
     }
@@ -63,10 +63,10 @@ describe('ambassadorProfiles', () => {
       })
       const result = await updateAmbassadorProfile({
         id: original.id,
-        input: { questId: 5228654 },
+        input: { questId: 4959143 },
       })
 
-      expect(result.questId).toEqual(5228654)
+      expect(result.questId).toEqual(4959143)
     }
   )
 

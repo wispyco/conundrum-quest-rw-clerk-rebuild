@@ -4,11 +4,11 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes } from '@redwoodjs/router'
 
-import { QUERY } from 'src/components/User/UsersCell'
+import { QUERY } from 'src/components/Hero/HeroesCell'
 
-const DELETE_USER_MUTATION = gql`
-  mutation DeleteUserMutation($id: Int!) {
-    deleteUser(id: $id) {
+const DELETE_HERO_MUTATION = gql`
+  mutation DeleteHeroMutation($id: Int!) {
+    deleteHero(id: $id) {
       id
     }
   }
@@ -53,10 +53,10 @@ const checkboxInputTag = (checked) => {
   return <input type="checkbox" checked={checked} disabled />
 }
 
-const UsersList = ({ users }) => {
-  const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
+const HeroesList = ({ heroes }) => {
+  const [deleteHero] = useMutation(DELETE_HERO_MUTATION, {
     onCompleted: () => {
-      toast.success('User deleted')
+      toast.success('Hero deleted')
     },
     onError: (error) => {
       toast.error(error.message)
@@ -69,8 +69,8 @@ const UsersList = ({ users }) => {
   })
 
   const onDeleteClick = (id) => {
-    if (confirm('Are you sure you want to delete user ' + id + '?')) {
-      deleteUser({ variables: { id } })
+    if (confirm('Are you sure you want to delete hero ' + id + '?')) {
+      deleteHero({ variables: { id } })
     }
   }
 
@@ -80,40 +80,38 @@ const UsersList = ({ users }) => {
         <thead>
           <tr>
             <th>Id</th>
-            <th>Uuid</th>
-            <th>Email</th>
             <th>Name</th>
+            <th>Quest id</th>
             <th>&nbsp;</th>
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{truncate(user.id)}</td>
-              <td>{truncate(user.uuid)}</td>
-              <td>{truncate(user.email)}</td>
-              <td>{truncate(user.name)}</td>
+          {heroes.map((hero) => (
+            <tr key={hero.id}>
+              <td>{truncate(hero.id)}</td>
+              <td>{truncate(hero.name)}</td>
+              <td>{truncate(hero.questId)}</td>
               <td>
                 <nav className="rw-table-actions">
                   <Link
-                    to={routes.user({ id: user.id })}
-                    title={'Show user ' + user.id + ' detail'}
+                    to={routes.hero({ id: hero.id })}
+                    title={'Show hero ' + hero.id + ' detail'}
                     className="rw-button rw-button-small"
                   >
                     Show
                   </Link>
                   <Link
-                    to={routes.editUser({ id: user.id })}
-                    title={'Edit user ' + user.id}
+                    to={routes.editHero({ id: hero.id })}
+                    title={'Edit hero ' + hero.id}
                     className="rw-button rw-button-small rw-button-blue"
                   >
                     Edit
                   </Link>
                   <button
                     type="button"
-                    title={'Delete user ' + user.id}
+                    title={'Delete hero ' + hero.id}
                     className="rw-button rw-button-small rw-button-red"
-                    onClick={() => onDeleteClick(user.id)}
+                    onClick={() => onDeleteClick(hero.id)}
                   >
                     Delete
                   </button>
@@ -127,4 +125,4 @@ const UsersList = ({ users }) => {
   )
 }
 
-export default UsersList
+export default HeroesList

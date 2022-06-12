@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgres"
-  url      = env("DATABASE_URL_DIRECT")
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -10,17 +10,23 @@ generator client {
 
 model User {
   id                Int                @id @default(autoincrement())
+  uuid              String             @unique
   email             String             @unique
   name              String?
-  role              Role               @default(KNIGHT)
+  userRoles         UserRole[]
   quests            Quest[]
   ambassadorProfile AmbassadorProfile?
 }
 
-enum Role {
-  ADMIN
-  KNIGHT
-  HERO
+model UserRole {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  name      String
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
+
+  @@unique([name, userId])
 }
 
 model Quest {

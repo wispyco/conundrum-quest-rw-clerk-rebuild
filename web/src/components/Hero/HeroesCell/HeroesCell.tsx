@@ -1,17 +1,16 @@
-import type { FindUsers } from 'types/graphql'
+import type { FindHeroes } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 import { Link, routes } from '@redwoodjs/router'
 
-import Users from 'src/components/User/Users'
+import Heroes from 'src/components/Hero/Heroes'
 
 export const QUERY = gql`
-  query FindUsers {
-    users {
+  query FindHeroes {
+    heroes {
       id
-      uuid
-      email
       name
+      questId
     }
   }
 `
@@ -21,9 +20,9 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => {
   return (
     <div className="rw-text-center">
-      {'No users yet. '}
+      {'No heroes yet. '}
       <Link
-        to={routes.newUser()}
+        to={routes.newHero()}
         className="rw-link"
       >
         {'Create one?'}
@@ -36,6 +35,6 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({ users }: CellSuccessProps<FindUsers>) => {
-  return <Users users={users} />
+export const Success = ({ heroes }: CellSuccessProps<FindHeroes>) => {
+  return <Heroes heroes={heroes} />
 }
