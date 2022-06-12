@@ -13,10 +13,12 @@ import AmbassadorProfilesLayout from 'src/layouts/AmbassadorProfilesLayout'
 import QuestsLayout from 'src/layouts/QuestsLayout'
 import UsersLayout from 'src/layouts/UsersLayout'
 import { useAuth } from '@redwoodjs/auth'
+import KnightLayout from 'src/layouts/KnightLayout/KnightLayout'
 
 const Routes = () => {
   return (
     <Router useAuth={useAuth}>
+      <Route path="/signin" page={SigninPage} name="signin" />
       <Route path="/signup" page={SignupPage} name="signup" />
       <Route path="/" name="home" page={HomePage} />
       <Set wrap={HeroesLayout}>
@@ -37,13 +39,17 @@ const Routes = () => {
         <Route path="/quests/{id:Int}" page={QuestQuestPage} name="quest" />
         <Route path="/quests" page={QuestQuestsPage} name="quests" />
       </Set>
+      <Set wrap={KnightLayout}>
+        <Private unauthenticated="home" roles={['KNIGHT']}>
+          <Route path="/users/{id:Int}/edit" page={UserEditUserPage} name="editUser" />
+          <Route path="/users/{id:Int}" page={UserUserPage} name="user" />
+        </Private>
+      </Set>
       <Set wrap={UsersLayout}>
         <Private unauthenticated="home" roles="admin">
           <Route path="/users/new" page={UserNewUserPage} name="newUser" />
+          <Route path="/users" page={UserUsersPage} name="users" />
         </Private>
-        <Route path="/users/{id:Int}/edit" page={UserEditUserPage} name="editUser" />
-        <Route path="/users/{id:Int}" page={UserUserPage} name="user" />
-        <Route path="/users" page={UserUsersPage} name="users" />
       </Set>
       <Route notfound page={NotFoundPage} />
     </Router>

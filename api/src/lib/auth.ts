@@ -26,17 +26,21 @@ export const getCurrentUser = async (
 ) => {
   console.log('decoded', decoded)
   console.log('context', context)
+  console.log('token', token)
 
   const userRoles = await db.userRole.findMany({
-    where: { user: { uuid: decoded.claim.sub } },
+    where: { user: { uuid: decoded.claim.iss } },
     select: { name: true },
+  })
+  const user = await db.user.findUnique({
+    where: { uuid: decoded.claim.iss },
   })
 
   const roles = userRoles.map((role) => {
     return role.name
   })
 
-  return context.currentUser || { roles: roles, uuid: decoded.claim.sub }
+  return context.currentUser || { roles: roles, user: user }
 }
 
 /**
