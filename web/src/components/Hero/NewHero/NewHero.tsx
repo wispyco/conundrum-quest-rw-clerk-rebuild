@@ -3,7 +3,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import HeroForm from 'src/components/Hero/HeroForm'
 
-const CREATE_HERO_MUTATION = gql`
+export const CREATE_HERO_MUTATION = gql`
   mutation CreateHeroMutation($input: CreateHeroInput!) {
     createHero(input: $input) {
       id
@@ -23,7 +23,7 @@ const NewHero = () => {
   })
 
   const onSave = (input) => {
-    const castInput = Object.assign(input, { questId: parseInt(input.questId), })
+    const castInput = Object.assign(input, { questId: parseInt(input.questId) })
     createHero({ variables: { input: castInput } })
   }
 

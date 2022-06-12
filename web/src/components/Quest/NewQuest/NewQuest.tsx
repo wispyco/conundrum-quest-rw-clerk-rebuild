@@ -2,6 +2,8 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import QuestForm from 'src/components/Quest/QuestForm'
+import { CREATE_HERO_MUTATION } from 'src/components/Hero/NewHero'
+import { useAuth } from '@redwoodjs/auth'
 
 const CREATE_QUEST_MUTATION = gql`
   mutation CreateQuestMutation($input: CreateQuestInput!) {
@@ -22,9 +24,40 @@ const NewQuest = () => {
     },
   })
 
-  const onSave = (input) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId), })
-    createQuest({ variables: { input: castInput } })
+  const [createHero, { loading: loadingHero, error: errorHero }] = useMutation(
+    CREATE_HERO_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('Hero created')
+        navigate(routes.heroes())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
+
+  const { currentUser } = useAuth()
+
+  const onSave = async (input) => {
+    const castInput = {
+      name: input.name,
+      userId: currentUser.user.id,
+    }
+    const quest = await createQuest({ variables: { input: castInput } })
+    const castInputHero = {
+      name: input.heroName,
+      questId: quest.data.createQuest.id,
+    }
+    await createHero({ variables: { input: castInputHero } })
+  }
+
+  if (loadingHero) {
+    return <p>Loading ...</p>
+  }
+
+  if (errorHero) {
+    return <pre>{JSON.stringify(errorHero, null, 2)}</pre>
   }
 
   return (

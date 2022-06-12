@@ -6,6 +6,8 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 
 import UserForm from 'src/components/User/UserForm'
+import { useEffect } from 'react'
+import { useAuth } from '@redwoodjs/auth'
 
 export const QUERY = gql`
   query EditUserById($id: Int!) {
@@ -48,6 +50,17 @@ export const Success = ({ user }: CellSuccessProps<EditUserById>) => {
   const onSave = (input, id) => {
     updateUser({ variables: { id, input } })
   }
+
+  const { currentUser, isAuthenticated } = useAuth()
+
+  useEffect(() => {
+    console.log('currentUser', currentUser)
+    console.log('user', user)
+
+    if (!isAuthenticated || !currentUser || currentUser.user.id !== user.id) {
+      navigate(routes.home())
+    }
+  }, [currentUser])
 
   return (
     <div className="rw-segment">
