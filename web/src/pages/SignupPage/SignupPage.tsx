@@ -1,4 +1,4 @@
-import { Link, routes } from '@redwoodjs/router'
+import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import { useAuth } from '@redwoodjs/auth'
 import { Form, Label, Submit, TextField } from '@redwoodjs/forms'
@@ -34,7 +34,7 @@ const SignupPage = () => {
   const [createUserRole, { loading: loadingRole, error: errorRole }] =
     useMutation(CREATE_USER_ROLE, {
       onCompleted: () => {
-        toast.success('Account Created')
+        toast.success('User Role Created')
         // navigate(routes.users())
       },
       onError: (error) => {
@@ -77,7 +77,7 @@ const SignupPage = () => {
         },
       },
     })
-    reauthenticate()
+    navigate(routes.user({ id: user.data.createUser.id }))
   }
 
   if (loading || loadingRole) return <div>Loading...</div>
