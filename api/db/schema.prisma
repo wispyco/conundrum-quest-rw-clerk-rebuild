@@ -35,8 +35,8 @@ model Quest {
   name            String?
   userId          Int
   submittedByuser User                @relation(fields: [userId], references: [id])
-  hero            Hero[]
-  ambassador      AmbassadorProfile[]
+  heros           Hero[]
+  ambassadors     AmbassadorProfile[]
 }
 
 model AmbassadorProfile {
@@ -45,7 +45,7 @@ model AmbassadorProfile {
   userId       Int     @unique
   questId      Int
   user         User    @relation(fields: [userId], references: [id])
-  quest        Quest[]
+  quests       Quest[]
   twitter      String
   profileImage String
 }

@@ -19,7 +19,11 @@ export const userRole: QueryResolvers['userRole'] = ({ id }) => {
 export const createUserRole: MutationResolvers['createUserRole'] = ({
   input,
 }) => {
-  if (input.password !== process.env.PASSWORD) {
+  if (
+    input.password !== process.env.PASSWORD &&
+    input.name !== 'KNIGHT' &&
+    input.name === 'ADMIN'
+  ) {
     throw new ForbiddenError("You don't have the correct password")
   }
   return db.userRole.create({

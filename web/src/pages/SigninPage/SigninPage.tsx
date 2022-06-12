@@ -5,7 +5,7 @@ import { MetaTags } from '@redwoodjs/web'
 import { useEffect } from 'react'
 
 const SigninPage = () => {
-  const { logIn, isAuthenticated, hasRole, currentUser } = useAuth()
+  const { logIn, isAuthenticated, hasRole, currentUser, logOut } = useAuth()
 
   const onSubmit = async (data) => {
     try {
@@ -26,6 +26,7 @@ const SigninPage = () => {
       <MetaTags title="Signin" description="Signin page" />
 
       <h1>SigninPage</h1>
+      {isAuthenticated && <button onClick={logOut}>Log out</button>}
       {!isAuthenticated && (
         <Form onSubmit={onSubmit}>
           <Label name="email">email</Label>

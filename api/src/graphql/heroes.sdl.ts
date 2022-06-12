@@ -4,7 +4,7 @@ export const schema = gql`
     name: String
     questId: Int!
     quests: [Quest]!
-    twitter: String
+    twitter: String!
   }
 
   type Query {
@@ -15,12 +15,13 @@ export const schema = gql`
   input CreateHeroInput {
     name: String
     questId: Int!
-    twitter: String
+    twitter: String!
   }
 
   input UpdateHeroInput {
     name: String
     questId: Int
+    twitter: String
   }
 
   type Mutation {

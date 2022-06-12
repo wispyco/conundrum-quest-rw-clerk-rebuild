@@ -3,7 +3,7 @@ import { Form, Label, Submit, TextField } from '@redwoodjs/forms'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/dist/toast'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const CREATE_USER_MUTATION = gql`
   mutation createUser($input: CreateUserInput!) {
@@ -59,6 +59,8 @@ const SignupPage = () => {
     }
   }
 
+  const [go, setGo] = useState(null)
+
   const initAccount = async () => {
     const user = await createUser({
       variables: {
@@ -68,26 +70,35 @@ const SignupPage = () => {
         },
       },
     })
-    console.log('user', user)
+    setGo(user)
+  }
+  const initAccountRole = async () => {
     await createUserRole({
       variables: {
         input: {
-          userId: user.data.createUser.id,
+          userId: currentUser.user.id,
           name: 'KNIGHT',
         },
       },
     })
-    reauthenticate()
   }
 
   useEffect(() => {
-    if (isAuthenticated && !hasRole('KNIGHT')) {
+    if (isAuthenticated && !userMetadata.issuer) {
       initAccount()
+    }
+    if (
+      isAuthenticated &&
+      userMetadata.issuer &&
+      currentUser.user.id &&
+      !hasRole('KNIGHT')
+    ) {
+      initAccountRole()
     }
     if (isAuthenticated && hasRole('KNIGHT')) {
       navigate(routes.user({ id: currentUser.user.id }))
     }
-  }, [userMetadata])
+  }, [userMetadata, currentUser])
 
   if (loading || loadingRole) return <div>Loading...</div>
 
@@ -99,6 +110,10 @@ const SignupPage = () => {
 
       <h1>SignupPage</h1>
       <>{isAuthenticated && <button onClick={logOut}>Sign out</button>}</>
+      <>
+        {isAuthenticated && <pre>{JSON.stringify(userMetadata, null, 2)}</pre>}
+        {isAuthenticated && <pre>{JSON.stringify(currentUser, null, 2)}</pre>}
+      </>
 
       {!isAuthenticated && (
         <Form onSubmit={onSubmit}>

@@ -4,8 +4,8 @@ export const schema = gql`
     name: String
     userId: Int!
     submittedByuser: User!
-    hero: [Hero]!
-    ambassador: [AmbassadorProfile]!
+    heros: [Hero]!
+    ambassadors: [AmbassadorProfile]!
   }
 
   type Query {
