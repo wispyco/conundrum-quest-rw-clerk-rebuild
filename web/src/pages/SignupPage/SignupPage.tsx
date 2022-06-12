@@ -1,5 +1,5 @@
 import { Link, navigate, routes } from '@redwoodjs/router'
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { MetaTags, useMutation, useQuery } from '@redwoodjs/web'
 import { useAuth } from '@redwoodjs/auth'
 import { Form, Label, Submit, TextField } from '@redwoodjs/forms'
 import { useEffect, useState } from 'react'
@@ -48,7 +48,7 @@ const SignupPage = () => {
     isAuthenticated,
     currentUser,
     userMetadata,
-    reauthenticate,
+    hasRole,
   } = useAuth()
 
   const onSubmit = async (data) => {
@@ -80,6 +80,12 @@ const SignupPage = () => {
     navigate(routes.user({ id: user.data.createUser.id }))
   }
 
+  useEffect(() => {
+    if (isAuthenticated && !hasRole('KNIGHT')) {
+      initAccount()
+    }
+  }, [userMetadata])
+
   if (loading || loadingRole) return <div>Loading...</div>
 
   if (error || errorRole) return <pre>{JSON.stringify(error, null, 2)}</pre>
@@ -90,15 +96,9 @@ const SignupPage = () => {
 
       <h1>SignupPage</h1>
       <>
-        {isAuthenticated && <pre>{JSON.stringify(currentUser, null, 2)}</pre>}
-        {isAuthenticated && <pre>{JSON.stringify(userMetadata, null, 2)}</pre>}
+        {/* {isAuthenticated && <pre>{JSON.stringify(currentUser, null, 2)}</pre>} */}
         {isAuthenticated && <button onClick={logOut}>Sign out</button>}
       </>
-      {isAuthenticated && currentUser && userMetadata && (
-        <>
-          <button onClick={() => initAccount()}>Init Account</button>
-        </>
-      )}
       {!isAuthenticated && (
         <Form onSubmit={onSubmit}>
           <Label name="email">email</Label>
