@@ -3,6 +3,9 @@ import humanize from 'humanize-string'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
+import { TwitterTimelineEmbed } from 'react-twitter-embed'
+import styled from 'styled-components'
+import { Profiler, useEffect, useState } from 'react'
 
 const DELETE_HERO_MUTATION = gql`
   mutation DeleteHeroMutation($id: Int!) {
@@ -62,27 +65,70 @@ const Hero = ({ hero }) => {
     }
   }
 
+  const [twitter, setTwitter] = useState(null)
+
+  const fetchTwitter = async (twitter) => {
+    const profile = await fetch(
+      `${window.location.origin}/.redwood/functions/twitter`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ twitter: twitter }),
+      }
+    )
+      .then(function (response) {
+        // The response is a Response instance.
+        // You parse the data into a useable format using `.json()`
+        return response.json()
+      })
+      .then(function (data) {
+        // `data` is the parsed version of the JSON returned from the above endpoint.
+        setTwitter(data.data.resultAwaited.data)
+        // { "userId": 1, "id": 1, "title": "...", "body": "..." }
+      })
+
+    // setTwitter(await profile)
+    // setTwitter(profile)
+  }
+
+  useEffect(() => {
+    if (hero.twitter && !twitter) {
+      fetchTwitter(hero.twitter)
+    }
+  }, [hero.twitter])
+
   return (
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">Hero {hero.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">
+            Hero {hero.id} Detail
+          </h2>
         </header>
         <table className="rw-table">
           <tbody>
             <tr>
               <th>Id</th>
               <td>{hero.id}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Name</th>
               <td>{hero.name}</td>
-            </tr><tr>
+            </tr>
+            <tr>
               <th>Quest id</th>
               <td>{hero.questId}</td>
             </tr>
           </tbody>
         </table>
       </div>
+      <TwitterProfile>
+        <img src={twitter?.profile_image_url} alt={twitter?.name} />
+        <TwitterTimelineEmbed
+          sourceType="profile"
+          screenName={hero.twitter}
+          options={{ height: 400 }}
+        />
+      </TwitterProfile>
       <nav className="rw-button-group">
         <Link
           to={routes.editHero({ id: hero.id })}
@@ -101,5 +147,19 @@ const Hero = ({ hero }) => {
     </>
   )
 }
+
+const TwitterProfile = styled.div`
+  width: 350px;
+  margin: 50px auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+`
 
 export default Hero

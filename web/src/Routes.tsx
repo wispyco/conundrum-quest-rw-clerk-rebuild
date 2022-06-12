@@ -18,6 +18,7 @@ import KnightLayout from 'src/layouts/KnightLayout/KnightLayout'
 const Routes = () => {
   return (
     <Router useAuth={useAuth}>
+      <Route path="/signup-admin" page={SignupAdminPage} name="signupAdmin" />
       <Route path="/signin" page={SigninPage} name="signin" />
       <Route path="/signup" page={SignupPage} name="signup" />
       <Route path="/" name="home" page={HomePage} />
@@ -40,13 +41,13 @@ const Routes = () => {
         <Route path="/quests" page={QuestQuestsPage} name="quests" />
       </Set>
       <Set wrap={KnightLayout}>
-        <Private unauthenticated="home" roles={['KNIGHT']}>
+        <Private unauthenticated="home" roles={['KNIGHT', 'ADMIN']}>
           <Route path="/users/{id:Int}/edit" page={UserEditUserPage} name="editUser" />
           <Route path="/users/{id:Int}" page={UserUserPage} name="user" />
         </Private>
       </Set>
       <Set wrap={UsersLayout}>
-        <Private unauthenticated="home" roles="admin">
+        <Private unauthenticated="home" roles={['ADMIN']}>
           <Route path="/users/new" page={UserNewUserPage} name="newUser" />
           <Route path="/users" page={UserUsersPage} name="users" />
         </Private>

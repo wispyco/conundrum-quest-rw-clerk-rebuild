@@ -1,3 +1,4 @@
+import { ForbiddenError } from '@redwoodjs/graphql-server'
 import { db } from 'src/lib/db'
 import type {
   QueryResolvers,
@@ -18,6 +19,9 @@ export const userRole: QueryResolvers['userRole'] = ({ id }) => {
 export const createUserRole: MutationResolvers['createUserRole'] = ({
   input,
 }) => {
+  if (input.password !== process.env.PASSWORD) {
+    throw new ForbiddenError("You don't have the correct password")
+  }
   return db.userRole.create({
     data: input,
   })

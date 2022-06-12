@@ -4,6 +4,7 @@ export const schema = gql`
     name: String
     questId: Int!
     quests: [Quest]!
+    twitter: String
   }
 
   type Query {
@@ -14,6 +15,7 @@ export const schema = gql`
   input CreateHeroInput {
     name: String
     questId: Int!
+    twitter: String
   }
 
   input UpdateHeroInput {

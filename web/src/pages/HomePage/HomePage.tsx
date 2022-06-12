@@ -1,7 +1,10 @@
+import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 
 const HomePage = () => {
+  const { hasRole } = useAuth()
+
   return (
     <>
       <MetaTags title="Home" description="Home page" />
@@ -10,6 +13,7 @@ const HomePage = () => {
       <p>
         Find me in <code>./web/src/pages/HomePage/HomePage.tsx</code>
       </p>
+      {hasRole('ADMIN') ? 'yes' : 'no'}
       <p>
         My default route is named <code>home</code>, link to me with `
         <Link to={routes.home()}>Home</Link>`

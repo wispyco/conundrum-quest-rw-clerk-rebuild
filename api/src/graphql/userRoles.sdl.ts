@@ -6,6 +6,7 @@ export const schema = gql`
     name: String!
     user: User
     userId: Int
+    password: String
   }
 
   type Query {
@@ -16,6 +17,7 @@ export const schema = gql`
   input CreateUserRoleInput {
     name: String!
     userId: Int
+    password: String
   }
 
   input UpdateUserRoleInput {

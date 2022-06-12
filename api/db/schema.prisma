@@ -25,6 +25,7 @@ model UserRole {
   name      String
   user      User?    @relation(fields: [userId], references: [id])
   userId    Int?
+  password  String?
 
   @@unique([name, userId])
 }
@@ -54,4 +55,5 @@ model Hero {
   name    String?
   questId Int
   quests  Quest[]
+  twitter String
 }

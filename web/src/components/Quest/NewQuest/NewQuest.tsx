@@ -48,6 +48,7 @@ const NewQuest = () => {
     const castInputHero = {
       name: input.heroName,
       questId: quest.data.createQuest.id,
+      twitter: input.twitter,
     }
     await createHero({ variables: { input: castInputHero } })
   }

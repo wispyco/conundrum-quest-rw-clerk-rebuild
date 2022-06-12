@@ -54,6 +54,20 @@ const QuestForm = (props) => {
           className="rw-input"
           errorClassName="rw-input rw-input-error"
         />
+        <Label
+          name="twitter"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Twitter
+        </Label>
+
+        <TextField
+          name="twitter"
+          defaultValue={props.hero?.name}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+        />
 
         <div className="rw-button-group">
           <Submit disabled={props.loading} className="rw-button rw-button-blue">
