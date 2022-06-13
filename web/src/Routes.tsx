@@ -14,10 +14,12 @@ import QuestsLayout from 'src/layouts/QuestsLayout'
 import UsersLayout from 'src/layouts/UsersLayout'
 import { useAuth } from '@redwoodjs/auth'
 import KnightLayout from 'src/layouts/KnightLayout/KnightLayout'
+import AddHeroToQuestPage from 'src/pages/AddHeroToQuestPage/AddHeroToQuestPage'
 
 const Routes = () => {
   return (
     <Router useAuth={useAuth}>
+      <Route path="/add-hero-to-quest/{id:Int}/create" page={AddHeroToQuestPage} name="addHeroToQuest" />
       <Route path="/signup-admin" page={SignupAdminPage} name="signupAdmin" />
       <Route path="/signin" page={SigninPage} name="signin" />
       <Route path="/signup" page={SignupPage} name="signup" />

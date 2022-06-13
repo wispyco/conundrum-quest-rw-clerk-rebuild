@@ -3,6 +3,12 @@ import humanize from 'humanize-string'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
+import { useAuth } from '@redwoodjs/auth'
+import styled from 'styled-components'
+import QuestsCell from 'src/components/Quest/QuestsCell'
+import { TwitterProfile } from 'src/styles/hero'
+import { TwitterTimelineEmbed } from 'react-twitter-embed'
+import { useFetchTwitter, useFetchTwitterMultiple } from 'src/utils/twitter'
 
 const DELETE_QUEST_MUTATION = gql`
   mutation DeleteQuestMutation($id: Int!) {
@@ -45,7 +51,7 @@ const checkboxInputTag = (checked) => {
   return <input type="checkbox" checked={checked} disabled />
 }
 
-const Quest = ({ quest }) => {
+const Quest = ({ quest, create }) => {
   const [deleteQuest] = useMutation(DELETE_QUEST_MUTATION, {
     onCompleted: () => {
       toast.success('Quest deleted')
@@ -62,44 +68,77 @@ const Quest = ({ quest }) => {
     }
   }
 
+  const addHero = (id) => {
+    navigate(routes.addHeroToQuest({ id: id }))
+  }
+
+  const { isAuthenticated } = useAuth()
+
+  const twitter = useFetchTwitterMultiple(quest.heros)
+
+  console.log('twitter', twitter)
+
   return (
     <>
-      <div className="rw-segment">
-        <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">Quest {quest.id} Detail</h2>
-        </header>
-        <table className="rw-table">
-          <tbody>
-            <tr>
-              <th>Id</th>
-              <td>{quest.id}</td>
-            </tr><tr>
-              <th>Name</th>
-              <td>{quest.name}</td>
-            </tr><tr>
-              <th>User id</th>
-              <td>{quest.userId}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <nav className="rw-button-group">
-        <Link
-          to={routes.editQuest({ id: quest.id })}
-          className="rw-button rw-button-blue"
-        >
-          Edit
-        </Link>
-        <button
-          type="button"
-          className="rw-button rw-button-red"
-          onClick={() => onDeleteClick(quest.id)}
-        >
-          Delete
-        </button>
-      </nav>
+      {!create ? (
+        <QuestStyle>
+          <h1>{quest.name}</h1>
+          <button onClick={() => addHero(quest.id)}>
+            Add a hero working on this problem
+          </button>
+          {quest.heros.map((hero, i) => (
+            <TwitterProfile className="hover" key={hero.id}>
+              {twitter && (
+                <div className="mast">
+                  <span>{hero.name}</span>
+                  <img
+                    src={twitter[i]?.profile_image_url}
+                    alt={twitter[i]?.name}
+                  />
+                </div>
+              )}
+              <div className="more">
+                <TwitterTimelineEmbed
+                  sourceType="profile"
+                  screenName={hero.twitter}
+                  options={{ height: 400 }}
+                />
+              </div>
+            </TwitterProfile>
+          ))}
+        </QuestStyle>
+      ) : (
+        <h1>{quest.name}</h1>
+      )}
     </>
   )
 }
+
+const QuestStyle = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0 auto;
+  h1 {
+    text-align: center;
+    grid-column: 1 / span 2;
+  }
+  .mast {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+  }
+  .more {
+    display: none;
+  }
+  .hover{
+    &:hover {
+      cursor: pointer;
+      .more {
+        display: block;
+      }
+    }
+  }
+  }
+`
 
 export default Quest

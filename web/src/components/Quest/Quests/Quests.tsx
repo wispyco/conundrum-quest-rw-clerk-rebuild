@@ -7,6 +7,11 @@ import { Link, routes, useLocation } from '@redwoodjs/router'
 import { QUERY } from 'src/components/Quest/QuestsCell'
 import { useAuth } from '@redwoodjs/auth'
 import { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import {
+  useFetchTwitterMultiple,
+  useFetchTwitterMultipleQuests,
+} from 'src/utils/twitter'
 
 const DELETE_QUEST_MUTATION = gql`
   mutation DeleteQuestMutation($id: Int!) {
@@ -80,56 +85,67 @@ const QuestsList = ({ quests }) => {
 
   const { pathname } = useLocation()
 
-  const [twitter, setTwitter] = useState([])
+  // const [twitter, setTwitter] = useState([])
 
-  const fetchTwitter = async (twitter) => {
-    fetch(`${window.location.origin}/.redwood/functions/twitter`, {
-      method: 'POST',
-      body: JSON.stringify({ twitter: twitter }),
-    })
-      .then(function (response) {
-        // The response is a Response instance.
-        // You parse the data into a useable format using `.json()`
-        return response.json()
-      })
-      .then(function (data) {
-        setTwitter((prevState) => {
-          return [{ ...prevState, ...data.data.resultAwaited.data }]
-        })
-      })
-  }
+  // const fetchTwitter = async (twitter) => {
+  //   fetch(`${window.location.origin}/.redwood/functions/twitter`, {
+  //     method: 'POST',
+  //     body: JSON.stringify({ twitter: twitter }),
+  //   })
+  //     .then(function (response) {
+  //       // The response is a Response instance.
+  //       // You parse the data into a useable format using `.json()`
+  //       return response.json()
+  //     })
+  //     .then(function (data) {
+  //       setTwitter((prevState) => {
+  //         return [{ ...prevState, ...data.data.resultAwaited.data }]
+  //       })
+  //     })
+  // }
 
-  useEffect(() => {
-    quests.forEach((quest) => {
-      quest.heros.forEach((hero) => {
-        if (hero.twitter) {
-          fetchTwitter(hero.twitter)
-        }
-      })
-    })
-  }, [quests])
+  // useEffect(() => {
+  //   quests.forEach((quest) => {
+  //     quest.heros.forEach((hero) => {
+  //       if (hero.twitter) {
+  //         fetchTwitter(hero.twitter)
+  //       }
+  //     })
+  //   })
+  // }, [quests])
+
+  const twitter = useFetchTwitterMultipleQuests(quests)
 
   return (
     <>
-      {pathname === '/' && !isAuthenticated ? (
+      {pathname === '/' ? (
         <>
           {quests.length > 0 ? (
-            <>
+            <QuestCard>
               {quests.map((quest) => (
-                <div key={quest.id}>
-                  <h3>{truncate(quest.name)}</h3>
-                  {quest.heros.map((hero, i) => (
-                    <>
-                      <p key={i}>{hero.name}</p>
-                      <img
-                        src={twitter[i]?.profile_image_url}
-                        alt={twitter[i]?.name}
-                      />
-                    </>
-                  ))}
-                </div>
+                <Link to={routes.quest({ id: quest.id })} key={quest.id}>
+                  <div>
+                    <h3>{truncate(quest.name)}</h3>
+                    {quest.heros.map((hero, i) => (
+                      <>
+                        <p key={i}>{hero.name}</p>
+                        {twitter && (
+                          <>
+                            {twitter.map((t, i) => (
+                              <img
+                                key={i}
+                                src={t.profile_image_url}
+                                alt={t.name}
+                              />
+                            ))}
+                          </>
+                        )}
+                      </>
+                    ))}
+                  </div>
+                </Link>
               ))}
-            </>
+            </QuestCard>
           ) : (
             <p>There are no Quests Currently</p>
           )}
@@ -187,5 +203,13 @@ const QuestsList = ({ quests }) => {
     </>
   )
 }
+
+const QuestCard = styled.div`
+  border: 1px solid #ccc;
+  width: 300px;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+`
 
 export default QuestsList

@@ -5,7 +5,9 @@ import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { TwitterTimelineEmbed } from 'react-twitter-embed'
 import styled from 'styled-components'
-import { Profiler, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { TwitterProfile } from 'src/styles/hero'
+import { useFetchTwitter } from 'src/utils/twitter'
 
 const DELETE_HERO_MUTATION = gql`
   mutation DeleteHeroMutation($id: Int!) {
@@ -65,28 +67,7 @@ const Hero = ({ hero }) => {
     }
   }
 
-  const [twitter, setTwitter] = useState(null)
-
-  const fetchTwitter = async (twitter) => {
-    fetch(`${window.location.origin}/.redwood/functions/twitter`, {
-      method: 'POST',
-      body: JSON.stringify({ twitter: twitter }),
-    })
-      .then(function (response) {
-        // The response is a Response instance.
-        // You parse the data into a useable format using `.json()`
-        return response.json()
-      })
-      .then(function (data) {
-        setTwitter(data.data.resultAwaited.data)
-      })
-  }
-
-  useEffect(() => {
-    if (hero.twitter && !twitter) {
-      fetchTwitter(hero.twitter)
-    }
-  }, [hero.twitter])
+  const twitter = useFetchTwitter(hero.twitter)
 
   return (
     <>
@@ -139,19 +120,5 @@ const Hero = ({ hero }) => {
     </>
   )
 }
-
-const TwitterProfile = styled.div`
-  width: 350px;
-  margin: 50px auto;
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-  }
-`
 
 export default Hero

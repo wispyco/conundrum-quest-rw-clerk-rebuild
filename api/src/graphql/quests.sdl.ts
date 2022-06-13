@@ -10,7 +10,7 @@ export const schema = gql`
 
   type Query {
     quests: [Quest!]! @skipAuth
-    quest(id: Int!): Quest @requireAuth
+    quest(id: Int!): Quest @skipAuth
   }
 
   input CreateQuestInput {

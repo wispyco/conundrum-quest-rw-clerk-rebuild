@@ -13,8 +13,8 @@ const CREATE_QUEST_MUTATION = gql`
   }
 `
 
-const UPDATE_HERO_MUTATION = gql`
-  mutation UpdateHeroMutation($input: UpdateHeroInput!, $id: Int!) {
+export const UPDATE_HERO_NEW_QUEST_MUTATION = gql`
+  mutation UpdateHeroNewQuestMutation($input: UpdateHeroInput!, $id: Int!) {
     updateHero(id: $id, input: $input) {
       id
     }
@@ -45,16 +45,18 @@ const NewQuest = () => {
     }
   )
 
-  const [updateHero, { loading: loadingHeroOnQuest, error: errorHeroOnQuest }] =
-    useMutation(UPDATE_HERO_MUTATION, {
-      onCompleted: () => {
-        toast.success('Hero Connection Updated')
-        navigate(routes.heroes())
-      },
-      onError: (error) => {
-        toast.error(error.message)
-      },
-    })
+  const [
+    updateHeroNewQuest,
+    { loading: loadingHeroNewQuest, error: errorHeroNewQuest },
+  ] = useMutation(UPDATE_HERO_NEW_QUEST_MUTATION, {
+    onCompleted: () => {
+      toast.success('Hero Connection Updated')
+      navigate(routes.heroes())
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
 
   const { currentUser } = useAuth()
 
@@ -73,20 +75,20 @@ const NewQuest = () => {
     const castInputUpdateHero = {
       questId: quest.data.createQuest.id,
     }
-    await updateHero({
+    await updateHeroNewQuest({
       variables: { id: hero.data.createHero.id, input: castInputUpdateHero },
     })
   }
 
-  if (loadingHero || loadingHeroOnQuest) {
+  if (loadingHero || loadingHeroNewQuest) {
     return <p>Loading ...</p>
   }
 
-  if (errorHero || errorHeroOnQuest) {
+  if (errorHero || errorHeroNewQuest) {
     return (
       <>
         <pre>{JSON.stringify(errorHero, null, 2)}</pre>
-        <pre>{JSON.stringify(errorHeroOnQuest, null, 2)}</pre>
+        <pre>{JSON.stringify(errorHeroNewQuest, null, 2)}</pre>
       </>
     )
   }

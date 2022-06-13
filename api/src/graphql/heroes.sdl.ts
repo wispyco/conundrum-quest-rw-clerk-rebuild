@@ -9,7 +9,7 @@ export const schema = gql`
 
   type Query {
     heroes: [Hero!]! @requireAuth
-    hero(id: Int!): Hero @requireAuth
+    hero(id: Int!): Hero @skipAuth
   }
 
   input CreateHeroInput {
