@@ -21,7 +21,7 @@ export const useFetchTwitter = (twitterProfile) => {
   return twitter
 }
 export const useFetchTwitterMultiple = (twitterProfileMany) => {
-  const [twitter, setTwitter] = useState(null)
+  const [twitter, setTwitter] = useState([])
 
   useEffect(() => {
     twitterProfileMany.forEach((twitterProfile) => {
@@ -39,10 +39,7 @@ export const useFetchTwitterMultiple = (twitterProfileMany) => {
           // setTwitter(data.data.resultAwaited.data)
           console.log('data', data)
           setTwitter((prevState) => {
-            return [
-              prevState || data.data.resultAwaited.data,
-              data.data.resultAwaited.data,
-            ]
+            return [...prevState, data.data.resultAwaited.data]
           })
         })
     })
@@ -54,7 +51,7 @@ export const useFetchTwitterMultiple = (twitterProfileMany) => {
 }
 
 export const useFetchTwitterMultipleQuests = (twitterProfileManyQuests) => {
-  const [twitter, setTwitter] = useState(null)
+  const [twitter, setTwitter] = useState([])
 
   useEffect(() => {
     twitterProfileManyQuests.forEach((twitterProfileMany) => {
@@ -71,7 +68,7 @@ export const useFetchTwitterMultipleQuests = (twitterProfileManyQuests) => {
           .then(function (data) {
             // setTwitter(data.data.resultAwaited.data)
             setTwitter((prevState) => {
-              return [{ ...prevState, ...data.data.resultAwaited.data }]
+              return [...prevState, data.data.resultAwaited.data]
             })
           })
       })

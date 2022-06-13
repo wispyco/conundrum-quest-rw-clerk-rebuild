@@ -115,12 +115,18 @@ const Quest = ({ quest, create }) => {
 }
 
 const QuestStyle = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: block;
+
   margin: 0 auto;
+  width: 75%;
+  button{
+    margin: 0 auto;
+    width: 300px;
+    display:block;
+  }
   h1 {
     text-align: center;
-    grid-column: 1 / span 2;
+    grid-column: 1 / span 3;
   }
   .mast {
     display: grid;
@@ -131,6 +137,7 @@ const QuestStyle = styled.div`
     display: none;
   }
   .hover{
+    float:left;
     &:hover {
       cursor: pointer;
       .more {

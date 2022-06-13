@@ -1,17 +1,13 @@
 import humanize from 'humanize-string'
 
+import { Link, routes, useLocation } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes, useLocation } from '@redwoodjs/router'
 
-import { QUERY } from 'src/components/Quest/QuestsCell'
 import { useAuth } from '@redwoodjs/auth'
-import { useEffect, useState } from 'react'
+import { QUERY } from 'src/components/Quest/QuestsCell'
+import { useFetchTwitterMultipleQuests } from 'src/utils/twitter'
 import styled from 'styled-components'
-import {
-  useFetchTwitterMultiple,
-  useFetchTwitterMultipleQuests,
-} from 'src/utils/twitter'
 
 const DELETE_QUEST_MUTATION = gql`
   mutation DeleteQuestMutation($id: Int!) {
@@ -85,35 +81,6 @@ const QuestsList = ({ quests }) => {
 
   const { pathname } = useLocation()
 
-  // const [twitter, setTwitter] = useState([])
-
-  // const fetchTwitter = async (twitter) => {
-  //   fetch(`${window.location.origin}/.redwood/functions/twitter`, {
-  //     method: 'POST',
-  //     body: JSON.stringify({ twitter: twitter }),
-  //   })
-  //     .then(function (response) {
-  //       // The response is a Response instance.
-  //       // You parse the data into a useable format using `.json()`
-  //       return response.json()
-  //     })
-  //     .then(function (data) {
-  //       setTwitter((prevState) => {
-  //         return [{ ...prevState, ...data.data.resultAwaited.data }]
-  //       })
-  //     })
-  // }
-
-  // useEffect(() => {
-  //   quests.forEach((quest) => {
-  //     quest.heros.forEach((hero) => {
-  //       if (hero.twitter) {
-  //         fetchTwitter(hero.twitter)
-  //       }
-  //     })
-  //   })
-  // }, [quests])
-
   const twitter = useFetchTwitterMultipleQuests(quests)
 
   return (
@@ -128,23 +95,22 @@ const QuestsList = ({ quests }) => {
                     <h3>{truncate(quest.name)}</h3>
                     {quest.heros.map((hero, i) => (
                       <>
-                        <p key={i}>{hero.name}</p>
                         {twitter && (
-                          <>
-                            {twitter.map((t, i) => (
-                              <img
-                                key={i}
-                                src={t.profile_image_url}
-                                alt={t.name}
-                              />
-                            ))}
-                          </>
+                          <span>
+                            <p>{twitter[i]?.name}</p>
+                            <img
+                              key={i}
+                              src={twitter[i]?.profile_image_url}
+                              alt={twitter[i]?.name}
+                            />
+                          </span>
                         )}
                       </>
                     ))}
                   </div>
                 </Link>
               ))}
+              <div className="clear" />
             </QuestCard>
           ) : (
             <p>There are no Quests Currently</p>
@@ -210,6 +176,34 @@ const QuestCard = styled.div`
   padding: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
+  span {
+    position: relative;
+    display: block;
+    float: left;
+  }
+  span p {
+    display: none;
+    position: absolute;
+    background: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  span {
+    &:hover {
+      p {
+        display: block;
+      }
+    }
+  }
+  img {
+    border-radius: 50%;
+    margin: 25px 10px;
+    display: inline-block;
+  }
+  .clear {
+    clear: both;
+  }
 `
 
 export default QuestsList
