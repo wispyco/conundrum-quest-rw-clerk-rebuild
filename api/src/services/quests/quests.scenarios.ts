@@ -5,14 +5,14 @@ export const standard = defineScenario<Prisma.QuestCreateArgs>({
     one: {
       data: {
         submittedByuser: {
-          create: { uuid: 'String9929818', email: 'String9853049' },
+          create: { uuid: 'String3941882', email: 'String9282525' },
         },
       },
     },
     two: {
       data: {
         submittedByuser: {
-          create: { uuid: 'String8819790', email: 'String2194987' },
+          create: { uuid: 'String8181025', email: 'String4121191' },
         },
       },
     },

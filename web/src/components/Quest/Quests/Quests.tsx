@@ -6,6 +6,7 @@ import { Link, routes, useLocation } from '@redwoodjs/router'
 
 import { QUERY } from 'src/components/Quest/QuestsCell'
 import { useAuth } from '@redwoodjs/auth'
+import { useEffect, useState } from 'react'
 
 const DELETE_QUEST_MUTATION = gql`
   mutation DeleteQuestMutation($id: Int!) {
@@ -75,35 +76,67 @@ const QuestsList = ({ quests }) => {
     }
   }
 
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, logOut } = useAuth()
 
-  const { pathname, search, hash } = useLocation()
+  const { pathname } = useLocation()
+
+  const [twitter, setTwitter] = useState([])
+
+  const fetchTwitter = async (twitter) => {
+    fetch(`${window.location.origin}/.redwood/functions/twitter`, {
+      method: 'POST',
+      body: JSON.stringify({ twitter: twitter }),
+    })
+      .then(function (response) {
+        // The response is a Response instance.
+        // You parse the data into a useable format using `.json()`
+        return response.json()
+      })
+      .then(function (data) {
+        setTwitter((prevState) => {
+          return [{ ...prevState, ...data.data.resultAwaited.data }]
+        })
+      })
+  }
+
+  useEffect(() => {
+    quests.forEach((quest) => {
+      quest.heros.forEach((hero) => {
+        if (hero.twitter) {
+          fetchTwitter(hero.twitter)
+        }
+      })
+    })
+  }, [quests])
 
   return (
     <>
       {pathname === '/' && !isAuthenticated ? (
         <>
-          {quests ? (
+          {quests.length > 0 ? (
             <>
               {quests.map((quest) => (
                 <div key={quest.id}>
                   <h3>{truncate(quest.name)}</h3>
-                  <pre>{JSON.stringify(quest, null, 2)}</pre>
-                  {quest.hero.map((hero) => (
-                    <div key={hero.id}>
-                      <h4>{hero.name}</h4>
-                      <p>{hero.twitter}</p>
-                    </div>
+                  {quest.heros.map((hero, i) => (
+                    <>
+                      <p key={i}>{hero.name}</p>
+                      <img
+                        src={twitter[i]?.profile_image_url}
+                        alt={twitter[i]?.name}
+                      />
+                    </>
                   ))}
                 </div>
               ))}
             </>
           ) : (
-            <p>No quests yet.</p>
+            <p>There are no Quests Currently</p>
           )}
         </>
       ) : (
         <div className="rw-segment rw-table-wrapper-responsive">
+          <button onClick={logOut}>Log out</button>
           <table className="rw-table">
             <thead>
               <tr>

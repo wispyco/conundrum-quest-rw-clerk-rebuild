@@ -23,8 +23,8 @@ export const createHero: MutationResolvers['createHero'] = ({ input }) => {
 
 export const updateHero: MutationResolvers['updateHero'] = ({ id, input }) => {
   return db.hero.update({
-    data: input,
-    where: { id },
+    where: { id: id },
+    data: { quests: { connect: [{ id: input.questId }] } },
   })
 }
 

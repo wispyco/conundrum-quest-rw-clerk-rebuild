@@ -68,26 +68,18 @@ const Hero = ({ hero }) => {
   const [twitter, setTwitter] = useState(null)
 
   const fetchTwitter = async (twitter) => {
-    const profile = await fetch(
-      `${window.location.origin}/.redwood/functions/twitter`,
-      {
-        method: 'POST',
-        body: JSON.stringify({ twitter: twitter }),
-      }
-    )
+    fetch(`${window.location.origin}/.redwood/functions/twitter`, {
+      method: 'POST',
+      body: JSON.stringify({ twitter: twitter }),
+    })
       .then(function (response) {
         // The response is a Response instance.
         // You parse the data into a useable format using `.json()`
         return response.json()
       })
       .then(function (data) {
-        // `data` is the parsed version of the JSON returned from the above endpoint.
         setTwitter(data.data.resultAwaited.data)
-        // { "userId": 1, "id": 1, "title": "...", "body": "..." }
       })
-
-    // setTwitter(await profile)
-    // setTwitter(profile)
   }
 
   useEffect(() => {

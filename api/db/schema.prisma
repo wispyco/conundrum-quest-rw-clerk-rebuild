@@ -35,9 +35,19 @@ model Quest {
   name            String?
   userId          Int
   submittedByuser User                @relation(fields: [userId], references: [id])
+  // heros           HeroOnQuest[]
   heros           Hero[]
   ambassadors     AmbassadorProfile[]
+  // HeroOnQuest     HeroOnQuest[]
 }
+
+// model HeroOnQuest {
+//   id      Int   @id @default(autoincrement())
+//   heroId  Int
+//   hero    Hero  @relation(fields: [heroId], references: [id])
+//   questId Int
+//   quest   Quest @relation(fields: [questId], references: [id])
+// }
 
 model AmbassadorProfile {
   id           Int     @id @default(autoincrement())
@@ -54,6 +64,8 @@ model Hero {
   id      Int     @id @default(autoincrement())
   name    String?
   questId Int
+  // quests  HeroOnQuest[]
   quests  Quest[]
   twitter String
+  // HeroOnQuest HeroOnQuest[]
 }

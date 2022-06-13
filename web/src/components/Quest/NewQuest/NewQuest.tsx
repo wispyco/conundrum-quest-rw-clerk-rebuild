@@ -13,6 +13,14 @@ const CREATE_QUEST_MUTATION = gql`
   }
 `
 
+const UPDATE_HERO_MUTATION = gql`
+  mutation UpdateHeroMutation($input: UpdateHeroInput!, $id: Int!) {
+    updateHero(id: $id, input: $input) {
+      id
+    }
+  }
+`
+
 const NewQuest = () => {
   const [createQuest, { loading, error }] = useMutation(CREATE_QUEST_MUTATION, {
     onCompleted: () => {
@@ -37,6 +45,17 @@ const NewQuest = () => {
     }
   )
 
+  const [updateHero, { loading: loadingHeroOnQuest, error: errorHeroOnQuest }] =
+    useMutation(UPDATE_HERO_MUTATION, {
+      onCompleted: () => {
+        toast.success('Hero Connection Updated')
+        navigate(routes.heroes())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    })
+
   const { currentUser } = useAuth()
 
   const onSave = async (input) => {
@@ -50,15 +69,26 @@ const NewQuest = () => {
       questId: quest.data.createQuest.id,
       twitter: input.twitter,
     }
-    await createHero({ variables: { input: castInputHero } })
+    const hero = await createHero({ variables: { input: castInputHero } })
+    const castInputUpdateHero = {
+      questId: quest.data.createQuest.id,
+    }
+    await updateHero({
+      variables: { id: hero.data.createHero.id, input: castInputUpdateHero },
+    })
   }
 
-  if (loadingHero) {
+  if (loadingHero || loadingHeroOnQuest) {
     return <p>Loading ...</p>
   }
 
-  if (errorHero) {
-    return <pre>{JSON.stringify(errorHero, null, 2)}</pre>
+  if (errorHero || errorHeroOnQuest) {
+    return (
+      <>
+        <pre>{JSON.stringify(errorHero, null, 2)}</pre>
+        <pre>{JSON.stringify(errorHeroOnQuest, null, 2)}</pre>
+      </>
+    )
   }
 
   return (
@@ -69,6 +99,7 @@ const NewQuest = () => {
       <div className="rw-segment-main">
         <QuestForm onSave={onSave} loading={loading} error={error} />
       </div>
+      <pre>{JSON.stringify(currentUser, null, 2)}</pre>
     </div>
   )
 }

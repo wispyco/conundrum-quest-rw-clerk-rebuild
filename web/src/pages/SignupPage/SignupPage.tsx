@@ -59,10 +59,8 @@ const SignupPage = () => {
     }
   }
 
-  const [go, setGo] = useState(null)
-
   const initAccount = async () => {
-    const user = await createUser({
+    await createUser({
       variables: {
         input: {
           email: userMetadata.email,
@@ -70,7 +68,7 @@ const SignupPage = () => {
         },
       },
     })
-    setGo(user)
+    reauthenticate()
   }
   const initAccountRole = async () => {
     await createUserRole({
@@ -81,16 +79,18 @@ const SignupPage = () => {
         },
       },
     })
+
+    reauthenticate()
   }
 
   useEffect(() => {
-    if (isAuthenticated && !userMetadata.issuer) {
+    if (isAuthenticated && userMetadata && !currentUser.user?.id) {
       initAccount()
     }
     if (
       isAuthenticated &&
       userMetadata.issuer &&
-      currentUser.user.id &&
+      currentUser.user?.id &&
       !hasRole('KNIGHT')
     ) {
       initAccountRole()

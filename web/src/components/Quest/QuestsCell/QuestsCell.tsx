@@ -11,7 +11,7 @@ export const QUERY = gql`
       id
       name
       userId
-      hero {
+      heros {
         name
         twitter
       }
