@@ -1,5 +1,5 @@
 import humanize from 'humanize-string'
-
+import React from 'react'
 import { Link, routes, useLocation } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
@@ -8,6 +8,7 @@ import { useAuth } from '@redwoodjs/auth'
 import { QUERY } from 'src/components/Quest/QuestsCell'
 import { useFetchTwitterMultipleQuests } from 'src/utils/twitter'
 import styled from 'styled-components'
+import { jsonPretty } from 'src/utils/json'
 
 const DELETE_QUEST_MUTATION = gql`
   mutation DeleteQuestMutation($id: Int!) {
@@ -87,31 +88,37 @@ const QuestsList = ({ quests }) => {
     <>
       {pathname === '/' ? (
         <>
+          {jsonPretty(quests)}
+          {jsonPretty(twitter)}
+
           {quests.length > 0 ? (
-            <QuestCard>
-              {quests.map((quest) => (
-                <Link to={routes.quest({ id: quest.id })} key={quest.id}>
-                  <div>
-                    <h3>{truncate(quest.name)}</h3>
-                    {quest.heros.map((hero, i) => (
-                      <>
-                        {twitter && (
-                          <span>
-                            <p>{twitter[i]?.name}</p>
-                            <img
-                              key={i}
-                              src={twitter[i]?.profile_image_url}
-                              alt={twitter[i]?.name}
-                            />
-                          </span>
-                        )}
-                      </>
-                    ))}
-                  </div>
-                </Link>
+            <>
+              {quests.map((quest, i) => (
+                <QuestCard key={quest.id}>
+                  <Link to={routes.quest({ id: quest.id })} key={quest.id}>
+                    <div>
+                      <h3>{truncate(quest.name)}</h3>
+                      {quest.heros.map((hero, index) => (
+                        <React.Fragment key={hero.id}>
+                          {twitter.length > 0 && twitter[i] && (
+                            <span>
+                              {hero.name}
+                              <p>{twitter[i][index]?.name}</p>
+                              <img
+                                key={i}
+                                src={twitter[i][index]?.profile_image_url}
+                                alt={twitter[i][index]?.name}
+                              />
+                            </span>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </Link>
+                  <div className="clear" />
+                </QuestCard>
               ))}
-              <div className="clear" />
-            </QuestCard>
+            </>
           ) : (
             <p>There are no Quests Currently</p>
           )}
