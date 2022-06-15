@@ -1,7 +1,7 @@
 import type { FindQuests } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
-import { Link, routes } from '@redwoodjs/router'
+import { Link, routes, useLocation } from '@redwoodjs/router'
 
 import Quests from 'src/components/Quest/Quests'
 
@@ -11,6 +11,10 @@ export const QUERY = gql`
       id
       name
       userId
+      heros {
+        name
+        twitter
+      }
     }
   }
 `
@@ -21,10 +25,7 @@ export const Empty = () => {
   return (
     <div className="rw-text-center">
       {'No quests yet. '}
-      <Link
-        to={routes.newQuest()}
-        className="rw-link"
-      >
+      <Link to={routes.newQuest()} className="rw-link">
         {'Create one?'}
       </Link>
     </div>

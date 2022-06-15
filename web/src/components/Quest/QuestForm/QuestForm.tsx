@@ -8,18 +8,8 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 
-
-
 const QuestForm = (props) => {
   const onSubmit = (data) => {
-
-  
-    
-    
-  
-    
-    
-  
     props.onSave(data, props?.quest?.id)
   }
 
@@ -32,7 +22,7 @@ const QuestForm = (props) => {
           titleClassName="rw-form-error-title"
           listClassName="rw-form-error-list"
         />
-      
+
         <Label
           name="name"
           className="rw-label"
@@ -40,41 +30,47 @@ const QuestForm = (props) => {
         >
           Name
         </Label>
-        
-          <TextField
-            name="name"
-            defaultValue={props.quest?.name}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-          />
-        
+
+        <TextField
+          name="name"
+          defaultValue={props.quest?.name}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+        />
 
         <FieldError name="name" className="rw-field-error" />
 
         <Label
-          name="userId"
+          name="heroName"
           className="rw-label"
           errorClassName="rw-label rw-label-error"
         >
-          User id
+          Hero Name
         </Label>
-        
-          <NumberField
-            name="userId"
-            defaultValue={props.quest?.userId}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            validation={{ required: true }}
-          />
-        
 
-        <FieldError name="userId" className="rw-field-error" />
+        <TextField
+          name="heroName"
+          defaultValue={props.hero?.name}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+        />
+        <Label
+          name="twitter"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Twitter
+        </Label>
+
+        <TextField
+          name="twitter"
+          defaultValue={props.hero?.name}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+        />
 
         <div className="rw-button-group">
-          <Submit
-            disabled={props.loading}
-            className="rw-button rw-button-blue"
-          >
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
             Save
           </Submit>
         </div>

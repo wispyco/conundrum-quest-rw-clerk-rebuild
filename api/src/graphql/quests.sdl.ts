@@ -4,13 +4,13 @@ export const schema = gql`
     name: String
     userId: Int!
     submittedByuser: User!
-    hero: [Hero]!
-    ambassador: [AmbassadorProfile]!
+    heros: [Hero]!
+    ambassadors: [AmbassadorProfile]!
   }
 
   type Query {
-    quests: [Quest!]! @requireAuth
-    quest(id: Int!): Quest @requireAuth
+    quests: [Quest!]! @skipAuth
+    quest(id: Int!): Quest @skipAuth
   }
 
   input CreateQuestInput {

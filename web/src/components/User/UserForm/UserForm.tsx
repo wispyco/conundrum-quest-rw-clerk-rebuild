@@ -4,7 +4,6 @@ import {
   FieldError,
   Label,
   TextField,
-  RadioField,
   Submit,
 } from '@redwoodjs/forms'
 
@@ -36,6 +35,25 @@ const UserForm = (props) => {
           listClassName="rw-form-error-list"
         />
       
+        <Label
+          name="uuid"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Uuid
+        </Label>
+        
+          <TextField
+            name="uuid"
+            defaultValue={props.user?.uuid}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+            validation={{ required: true }}
+          />
+        
+
+        <FieldError name="uuid" className="rw-field-error" />
+
         <Label
           name="email"
           className="rw-label"
@@ -72,62 +90,6 @@ const UserForm = (props) => {
         
 
         <FieldError name="name" className="rw-field-error" />
-
-        <Label
-          name="role"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Role
-        </Label>
-        
-          
-          
-        <div className="rw-check-radio-items">
-          <RadioField
-            id="user-role-0"
-            name="role"
-            defaultValue="ADMIN"
-            defaultChecked={props.user?.role?.includes('ADMIN')}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-          />
-          <div>
-            Admin
-          </div>
-        </div>
-          
-        <div className="rw-check-radio-items">
-          <RadioField
-            id="user-role-1"
-            name="role"
-            defaultValue="KNIGHT"
-            defaultChecked={props.user?.role?.includes('KNIGHT')}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-          />
-          <div>
-            Knight
-          </div>
-        </div>
-          
-        <div className="rw-check-radio-items">
-          <RadioField
-            id="user-role-2"
-            name="role"
-            defaultValue="HERO"
-            defaultChecked={props.user?.role?.includes('HERO')}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-          />
-          <div>
-            Hero
-          </div>
-        </div>
-          
-        
-
-        <FieldError name="role" className="rw-field-error" />
 
         <div className="rw-button-group">
           <Submit

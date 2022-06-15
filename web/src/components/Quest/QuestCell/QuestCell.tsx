@@ -9,6 +9,11 @@ export const QUERY = gql`
       id
       name
       userId
+      heros {
+        id
+        name
+        twitter
+      }
     }
   }
 `
@@ -21,6 +26,6 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({ quest }: CellSuccessProps<FindQuestById>) => {
-  return <Quest quest={quest} />
+export const Success = ({ quest, create }: CellSuccessProps<FindQuestById>) => {
+  return <Quest create={create} quest={quest} />
 }

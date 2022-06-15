@@ -22,20 +22,21 @@ describe('heroes', () => {
 
   scenario('creates a hero', async () => {
     const result = await createHero({
-      input: { questId: 5958839 },
+      input: { questId: 1777699, twitter: 'String' },
     })
 
-    expect(result.questId).toEqual(5958839)
+    expect(result.questId).toEqual(1777699)
+    expect(result.twitter).toEqual('String')
   })
 
   scenario('updates a hero', async (scenario: StandardScenario) => {
     const original = await hero({ id: scenario.hero.one.id })
     const result = await updateHero({
       id: original.id,
-      input: { questId: 5058744 },
+      input: { questId: 78797 },
     })
 
-    expect(result.questId).toEqual(5058744)
+    expect(result.questId).toEqual(78797)
   })
 
   scenario('deletes a hero', async (scenario: StandardScenario) => {

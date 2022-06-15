@@ -6,14 +6,16 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 
 import UserForm from 'src/components/User/UserForm'
+import { useEffect } from 'react'
+import { useAuth } from '@redwoodjs/auth'
 
 export const QUERY = gql`
   query EditUserById($id: Int!) {
     user: user(id: $id) {
       id
+      uuid
       email
       name
-      role
     }
   }
 `
@@ -21,9 +23,9 @@ const UPDATE_USER_MUTATION = gql`
   mutation UpdateUserMutation($id: Int!, $input: UpdateUserInput!) {
     updateUser(id: $id, input: $input) {
       id
+      uuid
       email
       name
-      role
     }
   }
 `
@@ -48,6 +50,19 @@ export const Success = ({ user }: CellSuccessProps<EditUserById>) => {
   const onSave = (input, id) => {
     updateUser({ variables: { id, input } })
   }
+
+  const { currentUser, isAuthenticated, hasRole } = useAuth()
+
+  useEffect(() => {
+    console.log('currentUser', currentUser)
+    console.log('user', user)
+
+    if (!isAuthenticated || !currentUser || currentUser.user.id !== user.id) {
+      if (hasRole('KNIGHT')) {
+        navigate(routes.home())
+      }
+    }
+  }, [currentUser])
 
   return (
     <div className="rw-segment">

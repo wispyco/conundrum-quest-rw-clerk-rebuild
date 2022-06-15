@@ -4,21 +4,24 @@ export const schema = gql`
     name: String
     questId: Int!
     quests: [Quest]!
+    twitter: String!
   }
 
   type Query {
     heroes: [Hero!]! @requireAuth
-    hero(id: Int!): Hero @requireAuth
+    hero(id: Int!): Hero @skipAuth
   }
 
   input CreateHeroInput {
     name: String
     questId: Int!
+    twitter: String!
   }
 
   input UpdateHeroInput {
     name: String
     questId: Int
+    twitter: String
   }
 
   type Mutation {

@@ -40,8 +40,8 @@ export const deleteQuest: MutationResolvers['deleteQuest'] = ({ id }) => {
 export const Quest: QuestResolvers = {
   submittedByuser: (_obj, { root }) =>
     db.quest.findUnique({ where: { id: root.id } }).submittedByuser(),
-  hero: (_obj, { root }) =>
-    db.quest.findUnique({ where: { id: root.id } }).hero(),
-  ambassador: (_obj, { root }) =>
-    db.quest.findUnique({ where: { id: root.id } }).ambassador(),
+  heros: (_obj, { root }) =>
+    db.quest.findUnique({ where: { id: root.id } }).heros(),
+  ambassadors: (_obj, { root }) =>
+    db.quest.findUnique({ where: { id: root.id } }).ambassadors(),
 }

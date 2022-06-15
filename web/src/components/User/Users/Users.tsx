@@ -80,9 +80,9 @@ const UsersList = ({ users }) => {
         <thead>
           <tr>
             <th>Id</th>
+            <th>Uuid</th>
             <th>Email</th>
             <th>Name</th>
-            <th>Role</th>
             <th>&nbsp;</th>
           </tr>
         </thead>
@@ -90,9 +90,9 @@ const UsersList = ({ users }) => {
           {users.map((user) => (
             <tr key={user.id}>
               <td>{truncate(user.id)}</td>
+              <td>{truncate(user.uuid)}</td>
               <td>{truncate(user.email)}</td>
               <td>{truncate(user.name)}</td>
-              <td>{formatEnum(user.role)}</td>
               <td>
                 <nav className="rw-table-actions">
                   <Link

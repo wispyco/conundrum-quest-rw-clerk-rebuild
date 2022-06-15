@@ -1,4 +1,5 @@
 import { db } from 'src/lib/db'
+import { requireOwnership } from 'src/lib/owner'
 import type {
   QueryResolvers,
   MutationResolvers,
@@ -21,7 +22,14 @@ export const createUser: MutationResolvers['createUser'] = ({ input }) => {
   })
 }
 
-export const updateUser: MutationResolvers['updateUser'] = ({ id, input }) => {
+export const updateUser: MutationResolvers['updateUser'] = async ({
+  id,
+  input,
+}) => {
+  console.log('id id id', id)
+
+  await requireOwnership(id)
+
   return db.user.update({
     data: input,
     where: { id },
@@ -35,6 +43,8 @@ export const deleteUser: MutationResolvers['deleteUser'] = ({ id }) => {
 }
 
 export const User: UserResolvers = {
+  userRoles: (_obj, { root }) =>
+    db.user.findUnique({ where: { id: root.id } }).userRoles(),
   quests: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).quests(),
   ambassadorProfile: (_obj, { root }) =>
