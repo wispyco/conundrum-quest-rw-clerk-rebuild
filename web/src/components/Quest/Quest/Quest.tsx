@@ -75,10 +75,6 @@ const Quest = ({ quest, create }) => {
 
   const { isAuthenticated } = useAuth()
 
-  const twitter = useFetchTwitterMultiple(quest.heros)
-
-  console.log('twitter', twitter)
-
   return (
     <>
       {!create ? (
