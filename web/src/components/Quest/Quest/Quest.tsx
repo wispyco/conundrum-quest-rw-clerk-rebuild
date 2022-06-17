@@ -9,6 +9,7 @@ import QuestsCell from 'src/components/Quest/QuestsCell'
 import { TwitterProfile } from 'src/styles/hero'
 import { TwitterTimelineEmbed } from 'react-twitter-embed'
 import { useFetchTwitter, useFetchTwitterMultiple } from 'src/utils/twitter'
+import TwitterCell from 'src/components/TwitterCell'
 
 const DELETE_QUEST_MUTATION = gql`
   mutation DeleteQuestMutation($id: Int!) {
@@ -88,15 +89,8 @@ const Quest = ({ quest, create }) => {
           </button>
           {quest.heros.map((hero, i) => (
             <TwitterProfile className="hover" key={hero.id}>
-              {twitter && (
-                <div className="mast">
-                  <span>{hero.name}</span>
-                  <img
-                    src={twitter[i]?.profile_image_url}
-                    alt={twitter[i]?.name}
-                  />
-                </div>
-              )}
+              {hero && <TwitterCell username={hero.twitter} />}
+
               <div className="more">
                 <TwitterTimelineEmbed
                   sourceType="profile"

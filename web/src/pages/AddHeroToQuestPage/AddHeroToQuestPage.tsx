@@ -1,3 +1,4 @@
+import { useAuth } from '@redwoodjs/auth'
 import { Form, Label, Submit, TextField } from '@redwoodjs/forms'
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags, useMutation } from '@redwoodjs/web'
@@ -5,6 +6,7 @@ import { toast } from '@redwoodjs/web/dist/toast'
 import { CREATE_HERO_MUTATION } from 'src/components/Hero/NewHero'
 import { UPDATE_HERO_NEW_QUEST_MUTATION } from 'src/components/Quest/NewQuest'
 import QuestCell from 'src/components/Quest/QuestCell'
+import { jsonPretty } from 'src/utils/json'
 
 const AddHeroToQuestPage = ({ id }) => {
   const [createHero, { loading: loadingHero, error: errorHero }] = useMutation(
@@ -31,6 +33,8 @@ const AddHeroToQuestPage = ({ id }) => {
       toast.error(error.message)
     },
   })
+
+  const { currentUser } = useAuth()
 
   const onSubmit = async (input) => {
     const castInputHero = {
@@ -65,6 +69,7 @@ const AddHeroToQuestPage = ({ id }) => {
       <MetaTags title="AddHeroToQuest" description="AddHeroToQuest page" />
 
       <h1>AddHeroToQuestPage</h1>
+      {jsonPretty(currentUser)}
       <QuestCell create={true} id={id} />
       <Form onSubmit={onSubmit}>
         <Label name="name">Name</Label>
