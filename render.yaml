@@ -30,7 +30,7 @@ services:
   type: web
   env: node
   region: oregon
-  buildCommand: yarn && yarn rw build api
+  buildCommand: yarn set version 3.2.1 && yarn && yarn rw build api
   startCommand: yarn rw deploy render api
   envVars:
   - key: NODE_VERSION
