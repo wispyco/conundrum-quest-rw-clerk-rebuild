@@ -2,7 +2,7 @@ import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 
 const Navigation = () => {
-  const { logOut } = useAuth()
+  const { logOut, isAuthenticated } = useAuth()
 
   return (
     <header className="rw-header">
@@ -11,9 +11,11 @@ const Navigation = () => {
           Home
         </Link>
       </h1>
-      <Link to={routes.newQuest()} className="rw-button rw-button-green">
-        <button onClick={logOut}>Log out</button>
-      </Link>
+      {isAuthenticated && (
+        <Link to={routes.newQuest()} className="rw-button rw-button-green">
+          <button onClick={logOut}>Log out</button>
+        </Link>
+      )}
     </header>
   )
 }

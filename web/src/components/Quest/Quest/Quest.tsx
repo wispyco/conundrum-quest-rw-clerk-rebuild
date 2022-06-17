@@ -75,16 +75,26 @@ const Quest = ({ quest, create }) => {
 
   const { isAuthenticated } = useAuth()
 
+  const goToHero = (id) => {
+    navigate(routes.hero({ id: id }))
+  }
+
   return (
     <>
       {!create ? (
         <QuestStyle>
           <h1>{quest.name}</h1>
-          <button onClick={() => addHero(quest.id)}>
-            Add a hero working on this problem
-          </button>
-          {quest.heros.map((hero, i) => (
-            <TwitterProfile className="hover" key={hero.id}>
+          {isAuthenticated && (
+            <button onClick={() => addHero(quest.id)}>
+              Add a hero working on this problem
+            </button>
+          )}
+          {quest.heros.map((hero) => (
+            <TwitterProfile
+              onClick={() => goToHero(hero.id)}
+              className="hover"
+              key={hero.id}
+            >
               {hero && <TwitterCell username={hero.twitter} />}
 
               <div className="more">

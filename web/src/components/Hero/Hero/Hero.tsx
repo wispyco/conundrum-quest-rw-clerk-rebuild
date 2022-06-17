@@ -5,6 +5,7 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { TwitterTimelineEmbed } from 'react-twitter-embed'
 import { TwitterProfile } from 'src/styles/hero'
+import TwitterCell from 'src/components/TwitterCell'
 
 const DELETE_HERO_MUTATION = gql`
   mutation DeleteHeroMutation($id: Int!) {
@@ -64,7 +65,7 @@ const Hero = ({ hero }) => {
     }
   }
 
-  const twitter = useFetchTwitter(hero.twitter)
+  // const twitter = useFetchTwitter(hero.twitter)
 
   return (
     <>
@@ -92,7 +93,7 @@ const Hero = ({ hero }) => {
         </table>
       </div>
       <TwitterProfile>
-        <img src={twitter?.profile_image_url} alt={twitter?.name} />
+        <TwitterCell username={hero.twitter} />
         <TwitterTimelineEmbed
           sourceType="profile"
           screenName={hero.twitter}
