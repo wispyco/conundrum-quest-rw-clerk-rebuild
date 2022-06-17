@@ -7,6 +7,6 @@ export const schema = gql`
   }
 
   type Query {
-    getTwitter(name: String!): Twitter! @skipAuth
+    getTwitter(username: String!): Twitter! @skipAuth
   }
 `
