@@ -1,13 +1,10 @@
 import humanize from 'humanize-string'
 
+import { Link, navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes, navigate } from '@redwoodjs/router'
 import { TwitterTimelineEmbed } from 'react-twitter-embed'
-import styled from 'styled-components'
-import { useEffect, useState } from 'react'
 import { TwitterProfile } from 'src/styles/hero'
-import { useFetchTwitter } from 'src/utils/twitter'
 
 const DELETE_HERO_MUTATION = gql`
   mutation DeleteHeroMutation($id: Int!) {
