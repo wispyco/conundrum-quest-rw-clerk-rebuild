@@ -24,10 +24,6 @@ export const getCurrentUser = async (
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   { event, context }
 ) => {
-  console.log('decoded', decoded)
-  console.log('context', context)
-  console.log('token', token)
-
   const userRoles = await db.userRole.findMany({
     where: { user: { uuid: decoded.claim.iss } },
     select: { name: true },

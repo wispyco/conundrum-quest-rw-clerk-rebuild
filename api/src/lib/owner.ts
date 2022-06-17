@@ -6,8 +6,6 @@ export const requireOwnership = async (id) => {
     where: { id: id },
   })
 
-  console.log('context is kewl', context)
-
   const uuid = context.currentUser.user.uuid
 
   if (context.currentUser.roles[0] === 'ADMIN') {

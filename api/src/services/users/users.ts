@@ -26,8 +26,6 @@ export const updateUser: MutationResolvers['updateUser'] = async ({
   id,
   input,
 }) => {
-  console.log('id id id', id)
-
   await requireOwnership(id)
 
   return db.user.update({

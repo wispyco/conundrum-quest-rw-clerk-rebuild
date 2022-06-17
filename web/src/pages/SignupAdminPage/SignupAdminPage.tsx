@@ -71,7 +71,6 @@ const SignupAdminPage = () => {
         },
       },
     })
-    console.log('user', user)
     await createUserRole({
       variables: {
         input: {

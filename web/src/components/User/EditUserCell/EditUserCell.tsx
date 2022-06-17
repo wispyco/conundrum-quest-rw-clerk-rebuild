@@ -54,9 +54,6 @@ export const Success = ({ user }: CellSuccessProps<EditUserById>) => {
   const { currentUser, isAuthenticated, hasRole } = useAuth()
 
   useEffect(() => {
-    console.log('currentUser', currentUser)
-    console.log('user', user)
-
     if (!isAuthenticated || !currentUser || currentUser.user.id !== user.id) {
       if (hasRole('KNIGHT')) {
         navigate(routes.home())
